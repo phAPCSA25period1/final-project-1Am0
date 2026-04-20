@@ -43,7 +43,11 @@ public class Square {
     // For debugging
     public String toString()
     {
-        if (isMine)
+        if (isHidden)
+        {
+            return "#";
+        }
+        else if (isMine)
         {
             return "X";
         }
