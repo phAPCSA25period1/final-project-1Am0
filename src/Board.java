@@ -3,13 +3,13 @@ public class Board {
     private int width;
     private int height;
     private int numMines;
+    private boolean gameStarted = false;
 
     public Board(int size) {
         width = size;
         height = size;
         // Standard mine density
         numMines = (int) (width * height * 0.206);
-        System.out.println(numMines);
         board = new Square[width][height];
 
         for (int i = 0; i < width; i++) {
@@ -17,22 +17,6 @@ public class Board {
                 board[i][j] = new Square();
             }
         }
-
-        int notPlaced = numMines;
-
-        while (notPlaced > 0)
-        {
-            int randX = (int)(Math.random() * (width));
-            int randY = (int)(Math.random() * (height));
-
-            if (!board[randX][randY].getIsMine())
-            {
-                board[randX][randY].setMine();
-                notPlaced--;
-            }
-        }
-
-        updateSquares();
     }
 
     public void updateSquares()
@@ -66,6 +50,11 @@ public class Board {
     }
 
     public void Click(int x, int y) {
+        if (!gameStarted)
+        {
+            startGame(x, y);
+        }
+
         if (x < 0 || x >= width || y < 0 || y >= height)
         {
             return;
@@ -102,5 +91,37 @@ public class Board {
             }
             System.out.println();
         }
+    }
+
+    public void startGame(int x, int y) {
+        gameStarted = true;
+
+        // Make safe initial squares
+        for (int a = -1; a < 2; a++)
+        {
+            for (int b = -1; b < 2; b++)
+            {
+                if (x + a >= 0 && x + a < width && y + b >= 0 && y + b < height)
+                {
+                    board[x + a][y + b].setValue(0);
+                }
+            }
+        }
+
+        int notPlaced = numMines;
+
+        while (notPlaced > 0)
+        {
+            int randX = (int)(Math.random() * (width));
+            int randY = (int)(Math.random() * (height));
+
+            if (!board[randX][randY].getIsMine() && board[randX][randY].getValue() == -1)
+            {
+                board[randX][randY].setMine();
+                notPlaced--;
+            }
+        }
+
+        updateSquares();
     }
 }

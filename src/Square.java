@@ -6,7 +6,7 @@ public class Square {
     public Square()
     {
         isMine = false;
-        value = 0;
+        value = -1;
         isHidden = true;
     }
 
