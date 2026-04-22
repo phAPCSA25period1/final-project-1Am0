@@ -1,0 +1,17 @@
+{
+    "name": "Java Project with Desktop",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/devcontainers/features/desktop-lite:1": {
+            "version": "latest",
+            "password": "noPassword"
+        },
+        "ghcr.io/devcontainers/features/java:1": {
+            "version": "17",
+            "installMaven": "true",
+            "installGradle": "true"
+        }
+    },
+    "forwardPorts": [6080, 5901],
+    "remoteUser": "vscode"
+}

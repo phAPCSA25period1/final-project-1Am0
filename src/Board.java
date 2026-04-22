@@ -4,10 +4,11 @@ public class Board {
     private int height;
     private int numMines;
     private boolean gameStarted = false;
+    private boolean gameEnded = false;
 
-    public Board(int size) {
-        width = size;
-        height = size;
+    public Board(int w, int h) {
+        width = w;
+        height = h;
         // Standard mine density
         numMines = (int) (width * height * 0.206);
         board = new Square[width][height];
@@ -66,7 +67,7 @@ public class Board {
             return;
         } else if (hitSquare.getIsMine()) {
             hitSquare.unhide();
-            // TODO: End the game, the player has clicked on a mine
+            endGame();
         } else if (hitSquare.getValue() == 0) {
             hitSquare.unhide();
             // TODO: Unhide all mines around
@@ -123,5 +124,16 @@ public class Board {
         }
 
         updateSquares();
+    }
+
+    void endGame()
+    {
+        //For now just print you lost
+        System.out.println("you have lost");
+        gameEnded = true;
+    }
+
+    public boolean isEnded(){
+        return gameEnded;
     }
 }
