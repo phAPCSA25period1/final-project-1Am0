@@ -1,5 +1,5 @@
 public class Board {
-    private Square[][] board;
+    public Square[][] board;
     private int width;
     private int height;
     private int numMines;
