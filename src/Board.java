@@ -70,7 +70,6 @@ public class Board {
             endGame();
         } else if (hitSquare.getValue() == 0) {
             hitSquare.unhide();
-            // TODO: Unhide all mines around
             for (int a = -1; a < 2; a++){
                 for (int b = -1; b < 2; b++){
                     if (a == 0 && b == 0){
@@ -81,7 +80,28 @@ public class Board {
             }
         } else {
             hitSquare.unhide();
-            // TODO: Unearth this square, it should be safe and continue logic
+        }
+    }
+
+    public void Flag(int x, int y)
+    {
+        if (!gameStarted)
+        {
+            startGame(x, y);
+        }
+
+        if (x < 0 || x >= width || y < 0 || y >= height)
+        {
+            return;
+        }
+
+        Square hitSquare = board[x][y];
+        if (!hitSquare.getHidden()) {
+            // Do nothing, this square has already been unearthed
+            return;
+        }
+        else {
+            hitSquare.flag();
         }
     }
 

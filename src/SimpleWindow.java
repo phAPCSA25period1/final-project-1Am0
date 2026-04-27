@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class SimpleWindow {
     public static JButton[][] buttons;
@@ -36,12 +37,12 @@ public class SimpleWindow {
                 button.setBorderPainted(false);
                 button.setFocusPainted(false);
 
-                button.setFocusable(false);       // Stops the blue "selection" highlight
-                button.setRolloverEnabled(false);  // Stops the button from lighting up when hovered
+                button.setFocusable(false); // Stops the blue "selection" highlight
+                button.setRolloverEnabled(false); // Stops the button from lighting up when hovered
                 button.setContentAreaFilled(false); // Disables the default "button" shading/animation
-                button.setOpaque(true);            // IMPORTANT: Makes sure your background colors still show up
+                button.setOpaque(true); // IMPORTANT: Makes sure your background colors still show up
 
-                button.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 10));
+                button.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12));
 
                 button.setBounds(i * 24, j * 24, 24, 24);
 
@@ -50,7 +51,11 @@ public class SimpleWindow {
                 button.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        b.Click(finalI, finalJ);
+                        if (SwingUtilities.isLeftMouseButton(e)) {
+                            b.Click(finalI, finalJ);
+                        } else if (SwingUtilities.isRightMouseButton(e)) {
+                            b.Flag(finalI, finalJ);
+                        }
                         b.printBoard();
                         updateVisuals();
                     }
@@ -69,41 +74,32 @@ public class SimpleWindow {
         System.out.println("started");
     }
 
-    public static void updateVisuals()
-    {
+    public static void updateVisuals() {
         for (int i = 0; i < 25; i++) {
             for (int j = 0; j < 25; j++) {
                 JButton button = buttons[i][j];
 
                 String newText = b.board[i][j].toString();
 
-                if (newText.equals("#"))
-                {
+                if (newText.equals("F")) {
+                    button.setBackground(Color.BLUE);
+                } else if (newText.equals("#")) {
                     button.setText("");
-                    if ((i + j) % 2 == 0)
-                    {
-                        button.setBackground(new Color(63, 224, 63));
+                    if ((i + j) % 2 == 0) {
+                        button.setBackground(Color.decode("#67cf5a"));
+                    } else {
+                        button.setBackground(Color.decode("#58be4a"));
                     }
-                    else
-                    {
-                        button.setBackground(new Color(97, 237, 97));
-                    }
-                }
-                else
-                {
+                } else {
                     button.setText(newText);
-                    if ((i + j) % 2 == 0)
-                    {
-                        button.setBackground(new Color(200, 217, 115));
-                    }
-                    else
-                    {
-                        button.setBackground(new Color(233, 252, 134));
+                    if ((i + j) % 2 == 0) {
+                        button.setBackground(Color.decode("#ccc99e"));
+                    } else {
+                        button.setBackground(Color.decode("#b8b485"));
                     }
                 }
 
-                if (newText.equals("X"))
-                {
+                if (newText.equals("X")) {
                     button.setBackground(Color.RED);
                 }
             }

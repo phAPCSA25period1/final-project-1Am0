@@ -2,6 +2,7 @@ public class Square {
     private boolean isMine;
     private int value;
     private boolean isHidden;
+    private boolean isFlagged;
 
     public Square()
     {
@@ -43,6 +44,9 @@ public class Square {
     // For debugging
     public String toString()
     {
+        if (isFlagged && isHidden){
+            return "F";
+        }
         if (isHidden)
         {
             return "#";
@@ -55,5 +59,15 @@ public class Square {
         {
             return String.valueOf(value);
         }
+    }
+
+    public boolean isFlagged()
+    {
+        return isFlagged;
+    }
+
+    public void flag()
+    {
+        isFlagged = true;
     }
 }
