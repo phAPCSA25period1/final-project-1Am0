@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -160,6 +161,7 @@ public class Window {
         }
 
         gameFrame = new JFrame("My First Window");
+        gameFrame.setLayout(new BorderLayout());
         createStatusBar();
 
         // Get screen dimensions and calculate available space
@@ -176,7 +178,7 @@ public class Window {
         int frameWidth = buttonSize * width;
         int frameHeight = buttonSize * height;
 
-        gameFrame.setSize(frameWidth, frameHeight);
+        gameFrame.setSize(frameWidth, frameHeight + 48);
 
         // Calculate font size proportional to button size
         fontSize = Math.max(8, buttonSize / 4);
@@ -255,7 +257,11 @@ public class Window {
         AspectRatioPanel panel = new AspectRatioPanel(aspectRatio);
         panel.add(gridPanel);
 
-        gameFrame.add(panel);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(statusBar, BorderLayout.NORTH);
+        mainPanel.add(panel, BorderLayout.CENTER);
+
+        gameFrame.add(mainPanel, BorderLayout.CENTER);
 
         // Add component listener to handle window resize
         gameFrame.addComponentListener(new ComponentAdapter() {
