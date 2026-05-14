@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Window",
+      "request": "launch",
+      "mainClass": "Window",
+      "projectName": "final-project-1Am0_63f6aa20"
+    },
+    {
+      "type": "java",
       "name": "SimpleWindow",
       "request": "launch",
       "mainClass": "SimpleWindow",

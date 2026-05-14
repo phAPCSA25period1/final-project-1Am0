@@ -15,8 +15,7 @@ public class Main {
 
         String in = "";
 
-        while (!in.equals("quit"))
-        {
+        while (!in.equals("quit")) {
             int x = scanner.nextInt();
             int y = scanner.nextInt();
 
@@ -24,8 +23,12 @@ public class Main {
 
             b.printBoard();
 
-            if (b.isEnded())
-            {
+            if (b.isEnded()) {
+                if (b.isWon()) {
+                    System.out.println("you have won");
+                } else {
+                    System.out.println("you have lost");
+                }
                 break;
             }
         }

@@ -4,70 +4,59 @@ public class Square {
     private boolean isHidden;
     private boolean isFlagged;
 
-    public Square()
-    {
+    public Square() {
         isMine = false;
         value = -1;
         isHidden = true;
     }
 
-    public int getValue()
-    {
+    public int getValue() {
         return value;
     }
 
-    public void setValue(int _val)
-    {
+    public void setValue(int _val) {
         value = _val;
     }
 
-    public boolean getIsMine()
-    {
+    public boolean getIsMine() {
         return isMine;
     }
 
-    public void setMine()
-    {
+    public void setMine() {
         isMine = true;
     }
 
-    public boolean getHidden()
-    {
+    public boolean getHidden() {
         return isHidden;
     }
 
-    public void unhide()
-    {
+    public void unhide() {
         isHidden = false;
     }
 
     // For debugging
-    public String toString()
-    {
-        if (isFlagged && isHidden){
+    public String toString() {
+        if (isFlagged && isHidden) {
             return "F";
         }
-        if (isHidden)
-        {
+        if (isHidden) {
             return "#";
-        }
-        else if (isMine)
-        {
+        } else if (isMine) {
             return "X";
-        }
-        else
-        {
+        } else {
             return String.valueOf(value);
         }
     }
 
-    public boolean isFlagged()
-    {
+    public boolean isFlagged() {
         return isFlagged;
     }
 
-    public void flag()
-    {
+    public void flag() {
         isFlagged = true;
+    }
+
+    public void unflag() {
+        isFlagged = false;
     }
 }
