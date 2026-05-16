@@ -1,3 +1,12 @@
+/**
+ * Represents the Minesweeper game board.
+ * 
+ * Manages:
+ * - Grid of squares with mines and their adjacent mine counts
+ * - Game state (started, ended, won/lost)
+ * - Click and flag logic
+ * - Mine placement and safe first click guarantee
+ */
 public class Board {
     public Square[][] board;
     private int width;
@@ -60,10 +69,17 @@ public class Board {
         }
 
         Square hitSquare = board[x][y];
-        if (!hitSquare.getHidden() || hitSquare.isFlagged()) {
+        if (!hitSquare.getHidden()) {
             // Do nothing, this square has already been unearthed
             return;
-        } else if (hitSquare.getIsMine()) {
+        }
+
+        // If flagged, remove the flag first
+        if (hitSquare.isFlagged()) {
+            hitSquare.unflag();
+        }
+
+        if (hitSquare.getIsMine()) {
             hitSquare.unhide();
             endGame(false);
         } else if (hitSquare.getValue() == 0) {

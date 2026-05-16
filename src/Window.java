@@ -17,6 +17,19 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+/**
+ * Manages the GUI for Minesweeper using Java Swing.
+ * 
+ * Handles:
+ * - Game window creation and rendering
+ * - Button grid layout and responsiveness
+ * - Mouse input (left/right click)
+ * - Visual updates for game state
+ * - Status bar (timer, flags remaining)
+ * - Game-over animations and dialogs
+ * - Difficulty selection
+ */
+
 // Custom layout manager that maintains aspect ratio
 class AspectRatioLayout implements java.awt.LayoutManager {
     private double aspectRatio;
@@ -167,7 +180,12 @@ public class Window {
         // Get screen dimensions and calculate available space
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int maxScreenWidth = (int) (screenSize.width * 0.95); // Leave 5% margin
-        int maxScreenHeight = (int) (screenSize.height * 0.90); // Leave 10% margin for taskbar
+        int maxScreenHeight = (int) (screenSize.height * 0.85); // Leave 15% margin for taskbar and window decorations
+
+        // Account for window decorations (approximately 30-40 pixels for title bar, 2-4
+        // pixels for borders)
+        maxScreenHeight -= 70;
+        maxScreenWidth -= 10;
 
         // Calculate button size to fit on screen while keeping squares square
         int buttonSizeByWidth = maxScreenWidth / width;
@@ -178,10 +196,12 @@ public class Window {
         int frameWidth = buttonSize * width;
         int frameHeight = buttonSize * height;
 
-        gameFrame.setSize(frameWidth, frameHeight + 48);
+        // Calculate font size proportional to button size - larger multiplier for
+        // bigger text
+        fontSize = Math.max(12, (int) (buttonSize * 0.45));
 
-        // Calculate font size proportional to button size
-        fontSize = Math.max(8, buttonSize / 4);
+        int statusBarHeight = Math.max(70, (int) (fontSize * 2.5));
+        gameFrame.setSize(frameWidth, frameHeight + statusBarHeight);
 
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameFrame.setResizable(true);
@@ -291,13 +311,13 @@ public class Window {
 
         if (newButtonSize > 0) {
             buttonSize = newButtonSize;
-            int newFontSize = Math.max(8, buttonSize / 4);
+            fontSize = Math.max(12, (int) (buttonSize * 0.45));
 
             // Update all buttons with new font size
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
                     JButton button = buttons[i][j];
-                    button.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, newFontSize));
+                    button.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, fontSize));
                 }
             }
 
@@ -506,7 +526,8 @@ public class Window {
         }
 
         statusBar = new JPanel(new GridLayout(1, 2, 12, 0));
-        statusBar.setPreferredSize(new Dimension(0, 48));
+        int statusBarHeight = Math.max(60, (int) (fontSize * 3.5));
+        statusBar.setPreferredSize(new Dimension(0, statusBarHeight));
         statusBar.setBackground(Color.decode("#d8e4c5"));
         statusBar.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.decode("#3d4424")));
 
@@ -515,8 +536,9 @@ public class Window {
 
         timeLabel.setHorizontalAlignment(JLabel.CENTER);
         flagsLabel.setHorizontalAlignment(JLabel.CENTER);
-        timeLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 16));
-        flagsLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 16));
+        int statusFontSize = Math.max(14, (int) (fontSize * 1.2));
+        timeLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, statusFontSize));
+        flagsLabel.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, statusFontSize));
 
         statusBar.add(timeLabel);
         statusBar.add(flagsLabel);

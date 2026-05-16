@@ -1,3 +1,12 @@
+/**
+ * Represents a single square on the Minesweeper board.
+ * 
+ * Each square tracks:
+ * - Whether it contains a mine
+ * - Number of adjacent mines (value)
+ * - Whether it is revealed or hidden
+ * - Whether it is flagged by the player
+ */
 public class Square {
     private boolean isMine;
     private int value;

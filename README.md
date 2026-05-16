@@ -1,15 +1,36 @@
 [![Open in Codespaces](https://classroom.github.com/assets/launch-codespace-2972f46106e565e64193e422d61a12cf1da4916b45550586e14ef0a7c637dd04.svg)](https://classroom.github.com/open-in-codespaces?assignment_repo_id=23508294)
-# AP Computer Science A – Final Project
+# Minesweeper – AP Computer Science A Final Project
 ## Software & Systems Development Capstone
 
-Welcome to your **Final Project repository**.
+A fully-functional **Minesweeper game** built with Java Swing, featuring three difficulty levels, responsive UI, and complete game state management.
 
-This repository will hold:
-- Your complete Java project
-- Your project journal and planning artifacts
-- Your final, working software product
+---
 
-This is not just an assignment — it is a **capstone software project**.
+## 🎮 How to Play
+
+### Running the Game
+```bash
+javac src/*.java -d bin/
+java -cp bin/ Window
+```
+
+### Controls
+- **Left Click** — Reveal a square
+  - If flagged, removes flag and reveals
+- **Right Click** — Place/remove flag
+- **Objective** — Reveal all non-mine squares without hitting a mine
+
+### Difficulty Levels
+- **Easy** — 12×8 grid, ~20 mines
+- **Medium** — 18×12 grid, ~45 mines
+- **Hard** — 27×18 grid, ~150 mines
+
+### Game Features
+- ✅ Automatic mine reveal on game over
+- ✅ Victory/loss screen with replay options
+- ✅ Real-time timer and flag counter
+- ✅ Responsive font scaling
+- ✅ Safe first click (no mine on starting square)
 
 ---
 
