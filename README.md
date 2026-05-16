@@ -1,3 +1,4 @@
+
 # Minesweeper
 
 A finished Minesweeper game implemented in Java using Swing. Playable desktop game with multiple difficulty levels, a timer, flagging, and safe first click.
@@ -51,3 +52,5 @@ If you prefer to run from an IDE, import the project as a Java project and run t
 Created by the project author. Uses only standard Java libraries.
 
 If you want any changes to this README (screenshots, badges, or extra instructions), tell me what to add and I'll update it.
+
+<img width="1920" height="1080" alt="minesweeper-class-diagram" src="https://github.com/user-attachments/assets/76bc4756-6b73-4167-a0c5-f6c935d4899f" />
