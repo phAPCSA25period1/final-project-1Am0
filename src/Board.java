@@ -1,6 +1,6 @@
 /**
  * Represents the Minesweeper game board.
- * 
+ *
  * Manages:
  * - Grid of squares with mines and their adjacent mine counts
  * - Game state (started, ended, won/lost)

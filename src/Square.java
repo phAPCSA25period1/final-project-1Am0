@@ -1,6 +1,6 @@
 /**
  * Represents a single square on the Minesweeper board.
- * 
+ *
  * Each square tracks:
  * - Whether it contains a mine
  * - Number of adjacent mines (value)

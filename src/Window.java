@@ -19,7 +19,7 @@ import javax.swing.Timer;
 
 /**
  * Manages the GUI for Minesweeper using Java Swing.
- * 
+ *
  * Handles:
  * - Game window creation and rendering
  * - Button grid layout and responsiveness
