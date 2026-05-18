@@ -1,9 +1,6 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 /**
@@ -30,10 +26,18 @@ import javax.swing.Timer;
  * - Difficulty selection
  */
 
-// Custom layout manager that maintains aspect ratio
+/**
+ * Custom layout manager that maintains a fixed aspect ratio for its component.
+ * Useful for keeping the game grid square regardless of window resize.
+ */
 class AspectRatioLayout implements java.awt.LayoutManager {
-    private double aspectRatio;
+    private double aspectRatio; // Target width:height ratio
 
+    /**
+     * Constructs a layout manager with a specified aspect ratio.
+     *
+     * @param aspectRatio the target aspect ratio (width/height)
+     */
     public AspectRatioLayout(double aspectRatio) {
         this.aspectRatio = aspectRatio;
     }
@@ -84,63 +88,86 @@ class AspectRatioLayout implements java.awt.LayoutManager {
     }
 }
 
-// Custom panel that maintains aspect ratio
+/**
+ * Custom JPanel that maintains a fixed aspect ratio during window resizing.
+ * Prevents the game grid from becoming distorted when the window is resized.
+ */
 class AspectRatioPanel extends JPanel {
+    /**
+     * Constructs a panel with the specified aspect ratio.
+     *
+     * @param aspectRatio the target aspect ratio (width/height)
+     */
     public AspectRatioPanel(double aspectRatio) {
         setLayout(new AspectRatioLayout(aspectRatio));
     }
 }
 
 public class Window {
-    public static JButton[][] buttons;
-    public static Board b;
-    static int width;
-    static int height;
-    static int buttonSize;
-    static int fontSize;
-    static JFrame gameFrame;
-    static JPanel statusBar;
-    static JLabel timeLabel;
-    static JLabel flagsLabel;
-    static Timer statusTimer;
-    static Timer gameOverTimer;
-    static int elapsedSeconds;
-    static int currentDifficulty;
-    static boolean gameOverAnimationRunning;
+    // Game state variables
+    public static JButton[][] buttons; // 2D array of button components for the game grid
+    public static Board b; // Reference to the game board logic
+    static int width; // Game board width in squares
+    static int height; // Game board height in squares
+    static int buttonSize; // Size of each button in pixels
+    static int fontSize; // Font size for numbers/symbols on buttons
 
+    // GUI components
+    static JFrame gameFrame; // Main game window
+    static JPanel statusBar; // Status bar showing time and flags
+    static JLabel timeLabel; // Label displaying elapsed time
+    static JLabel flagsLabel; // Label displaying remaining flags
+    static Timer statusTimer; // Timer for updating time display every second
+    static Timer gameOverTimer; // Timer for game-over animation sequence
+    static int elapsedSeconds; // Elapsed game time in seconds
+    static int currentDifficulty; // Current difficulty level (0=Easy, 1=Medium, 2=Hard)
+    static boolean gameOverAnimationRunning; // Flag for game-over animation state
+
+    /**
+     * Main entry point for the Minesweeper application.
+     * Displays a difficulty selection screen with three options: Easy, Medium, and
+     * Hard.
+     * The player's selection determines the board size and mine count.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         // Create difficulty selection screen
         JFrame difficultyFrame = new JFrame("Minesweeper - Select Difficulty");
         difficultyFrame.setSize(400, 200);
         difficultyFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Create panel with three difficulty buttons
         JPanel difficultyPanel = new JPanel(new GridLayout(1, 3, 10, 10));
 
         JButton easyButton = new JButton("Easy");
         JButton mediumButton = new JButton("Medium");
         JButton hardButton = new JButton("Hard");
 
+        // Easy difficulty - small board
         easyButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 difficultyFrame.dispose();
-                startGame(0);
+                startGame(0); // Difficulty 0 = Easy
             }
         });
 
+        // Medium difficulty - standard board
         mediumButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 difficultyFrame.dispose();
-                startGame(1);
+                startGame(1); // Difficulty 1 = Medium
             }
         });
 
+        // Hard difficulty - large board
         hardButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 difficultyFrame.dispose();
-                startGame(2);
+                startGame(2); // Difficulty 2 = Hard
             }
         });
 
@@ -285,18 +312,27 @@ public class Window {
 
         // Add component listener to handle window resize
         gameFrame.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                resizeButtons(gridPanel);
-            }
-        });
 
-        updateVisuals();
-
-        gameFrame.setVisible(true);
-
-        System.out.println("started");
+    @Override
+    public void componentResized(ComponentEvent e) {
+        resizeButtons(gridPanel);
     }
+
+    });
+
+    updateVisuals();
+
+    gameFrame.setVisible(true);
+
+    System.out.println("started");}
+
+    /**
+     * \n * Recalculates button sizes when the game window is resized.\n * Ensures
+     * buttons remain square and proportional to the window size.\n * Updates font
+     * sizes accordingly to maintain readability.\n *\n * @param gridPanel the panel
+     * containing the button grid\n
+     */
+    \n
 
     public static void resizeButtons(JPanel gridPanel) {
         // Get the grid panel's actual size
@@ -327,6 +363,12 @@ public class Window {
         }
     }
 
+    /**
+     * \n * Updates the visual appearance of all buttons on the game board.\n *
+     * Applies correct colors, text, and styling based on current board state.\n
+     */
+    \n
+
     public static void updateVisuals() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -334,6 +376,17 @@ public class Window {
             }
         }
     }
+
+    /**
+     * \n * Applies the correct visual appearance to a single button based on its
+     * square state.\n * Handles different displays for:\n * - Hidden squares
+     * (green)\n * - Flagged squares (with flag symbol)\n * - Revealed safe squares
+     * (with number or empty)\n * - Revealed mines (with X symbol)\n * - Game-over
+     * animations\n *\n * @param x the column coordinate of the button\n * @param y
+     * the row coordinate of the button\n * @param hovered whether the mouse is
+     * currently hovering over this button\n
+     */
+    \n
 
     public static void applyButtonAppearance(int x, int y, boolean hovered) {
         JButton button = buttons[x][y];
@@ -387,6 +440,14 @@ public class Window {
         button.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, Math.max(8, fontSize)));
     }
 
+    /**
+     * \n * Returns the appropriate color for displaying a mine count number.\n *
+     * Each number (1-8) has a specific color for easy visual identification.\n *
+     * Uses traditional Minesweeper color scheme.\n *\n * @param value the number of
+     * adjacent mines (1-8)\n * @return the Color to display for this number\n
+     */
+    \n
+
     public static Color getNumberColor(int value) {
         switch (value) {
             case 1:
@@ -409,6 +470,14 @@ public class Window {
                 return Color.BLACK;
         }
     }
+
+    /**
+     * \n * Starts the game-over animation sequence.\n * Disables button interaction
+     * and plays a flashing animation\n * highlighting either winning or losing
+     * squares.\n * Animation runs for 6 frames (approximately 840ms) before
+     * triggering game-end dialog.\n
+     */
+    \n
 
     public static void startGameOverAnimation() {
         if (gameOverAnimationRunning) {
@@ -443,6 +512,15 @@ public class Window {
         gameOverTimer.start();
     }
 
+    /**
+     * Updates the game board display for one frame of the game-over animation.
+     * Alternates button colors between highlight and normal states.
+     * Reveals all mines if the player lost, or highlights safe squares if they won.
+     *
+     * @param won            whether the player won the game
+     * @param highlightPhase whether this is a "highlight" frame (true) or "normal"
+     *                       frame (false)
+     */
     public static void updateGameOverFrame(boolean won, boolean highlightPhase) {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -487,6 +565,12 @@ public class Window {
         }
     }
 
+    /**
+     * Handles the end-game sequence after animation completes.
+     * Displays a dialog with the game result and options to play again,
+     * select a new difficulty, or exit the game.
+     * Manages the appropriate action based on user selection.
+     */
     public static void handleGameEnd() {
         boolean won = b.isWon();
         String result = won ? "You Won!" : "You Lost!";
@@ -520,6 +604,11 @@ public class Window {
         }
     }
 
+    /**
+     * Creates and initializes the status bar at the top of the game window.
+     * The status bar displays the elapsed time and remaining flags available.
+     * Sets up a timer to update the time label every second.
+     */
     public static void createStatusBar() {
         if (statusTimer != null) {
             statusTimer.stop();
@@ -551,12 +640,21 @@ public class Window {
         updateStatusLabels();
     }
 
+    /**
+     * Starts the status timer if the game has begun and the timer isn't already
+     * running.
+     * The timer increments elapsed time and updates the time display.
+     */
     public static void startTimerIfNeeded() {
         if (b != null && b.isStarted() && statusTimer != null && !statusTimer.isRunning()) {
             statusTimer.start();
         }
     }
 
+    /**
+     * Stops the status timer from updating.
+     * Called when the game ends to pause the elapsed time.
+     */
     public static void stopStatusTimer() {
         if (statusTimer != null) {
             statusTimer.stop();
@@ -564,6 +662,10 @@ public class Window {
         updateStatusLabels();
     }
 
+    /**
+     * Updates the status bar labels with current game information.
+     * Refreshes the elapsed time display and remaining flags count.
+     */
     public static void updateStatusLabels() {
         if (timeLabel != null) {
             timeLabel.setText("Time: " + formatTime(elapsedSeconds));
@@ -573,10 +675,24 @@ public class Window {
         }
     }
 
+    /**
+     * Builds the game-over message displayed in the end-game dialog.
+     * Appends game statistics (time and flags) to the base message.
+     *
+     * @param baseMessage the initial message to display (win/loss text)
+     * @return the complete message including game statistics
+     */
     public static String buildGameOverMessage(String baseMessage) {
         return baseMessage + "\nTime Elapsed: " + formatTime(elapsedSeconds) + "\nFlags Left: " + b.getFlagsRemaining();
     }
 
+    /**
+     * Converts elapsed seconds into a formatted time string (MM:SS format).
+     * Pads with zeros for single-digit minutes and seconds.
+     *
+     * @param seconds the total elapsed seconds
+     * @return a formatted time string (e.g., "01:45" for 105 seconds)
+     */
     public static String formatTime(int seconds) {
         int minutes = seconds / 60;
         int remainingSeconds = seconds % 60;
